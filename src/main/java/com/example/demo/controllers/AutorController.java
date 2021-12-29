@@ -2,6 +2,8 @@ package com.example.demo.controllers;
 
 import com.example.demo.model.Autor;
 import com.example.demo.repository.IAutorRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ public class AutorController {
     @Autowired
     private IAutorRepository autorRepository;
 
+    Logger logger = LoggerFactory.getLogger(AutorController.class);
+
     @GetMapping
     public ResponseEntity<List<Autor>> getAllTodos() {
         List<Autor> autores = autorRepository.findAll();
@@ -25,6 +29,11 @@ public class AutorController {
 
     @PostMapping
     public Autor create(@RequestBody Autor autor) {
-        return autorRepository.save(autor);
+        try {
+            return autorRepository.save(autor);
+        } catch (Exception e) {
+            logger.error(String.valueOf(e));
+            return null;
+        }
     }
 }

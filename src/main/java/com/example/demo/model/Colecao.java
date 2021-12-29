@@ -1,7 +1,8 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,12 +11,14 @@ import java.util.List;
 public class Colecao {
     @Id
     @GeneratedValue
+    @JsonProperty
     private Integer id;
 
     @Column(length=1024)
+    @JsonProperty
     private String titulo;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
-    private List<Recurso> recursos = new ArrayList<Recurso>();
+    @OneToMany
+    @JoinColumn(name="recurso_id")
+    private List<Recurso> recursos;
 }

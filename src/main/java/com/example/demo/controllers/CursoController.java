@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/curso")
@@ -21,6 +22,26 @@ public class CursoController {
     public ResponseEntity<List<Curso>> getAllTodos() {
         List<Curso> cursos = cursoRepository.findAll();
         return new ResponseEntity<>(cursos, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Curso> getCursoById(@PathVariable int id) {
+        Optional<Curso> curso = cursoRepository.findById(id);
+        if (!curso.isEmpty()) {
+            return new ResponseEntity<>(curso.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Curso> deleteCursoById(@PathVariable int id) {
+        Optional<Curso> curso = cursoRepository.findById(id);
+        if (!curso.isEmpty()) {
+            cursoRepository.deleteById(id);
+            return new ResponseEntity<>(curso.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping

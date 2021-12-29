@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,16 +18,25 @@ public class Recurso {
     private String titulo;
 
     @Column(length=4096)
+    @JsonProperty
     private String descricao;
+
+    @JsonProperty
     private String link;
+
+    @JsonProperty
     private String imagem;
 
+    @JsonProperty
     private Date data_de_cricao;
 
+    @JsonProperty
     private Date data_de_registro;
+
+    @JsonProperty
     public ArrayList<String> palavras_chaves;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
-    private List<Autor> recursos = new ArrayList<Autor>();
+    @OneToMany
+    @JoinColumn(name="autor_id")
+    private List<Autor> autores;
 }
