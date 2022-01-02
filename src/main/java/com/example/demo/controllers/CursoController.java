@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.helpers.ValidationError;
 import com.example.demo.model.Curso;
 import com.example.demo.repository.ICursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,33 @@ public class CursoController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Curso> updateCursoById(@PathVariable int id, @RequestBody Curso incoming_curso) {
+        Optional<Curso> curso = cursoRepository.findById(id);
+        if (!curso.isEmpty()) {
+            ValidationError validationError = getValidationErrorByCurso(incoming_curso, true);
+
+            if (validationError.hasError())
+                return new ResponseEntity<>(null, validationError.getStatus());
+
+            cursoRepository.save(incoming_curso);
+            return new ResponseEntity<>(incoming_curso, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping
     public Curso create(@RequestBody Curso curso) {
         return cursoRepository.save(curso);
+    }
+
+    private ValidationError getValidationErrorByCurso(Curso curso, Boolean strict) {
+        if (strict && curso.getId() == null) {
+            return new ValidationError(HttpStatus.BAD_REQUEST, "Strict cursos must have a 'ID'");
+        } else if (curso.getDataDeRegistro() == null) {
+            return new ValidationError(HttpStatus.BAD_REQUEST, "cursos must have a 'data_de_registro'");
+        }
+
+        return new ValidationError();
     }
 }
