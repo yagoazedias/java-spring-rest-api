@@ -31,6 +31,10 @@ public class Recurso {
     @OneToMany
     @JoinColumn(name="autor_id")
     private List<Autor> autores;
+    @JsonProperty("colecao_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="colecao_id")
+    private Colecao colecao;
 
     public Recurso() {}
 

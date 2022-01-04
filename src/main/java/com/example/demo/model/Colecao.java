@@ -1,9 +1,12 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "colecoes")
@@ -18,17 +21,15 @@ public class Colecao {
     @JsonProperty
     private String titulo;
 
-    @JsonProperty("recursos")
-    @OneToMany
-    @JoinColumn(name="recurso_id")
-    private List<Recurso> recursos;
+    @OneToMany(mappedBy="colecao")
+    @JsonIgnore
+    private Set<Recurso> recursos = new HashSet<>();
 
     public Colecao() {}
 
-    public Colecao(Integer id, String titulo, List<Recurso> recursos) {
+    public Colecao(Integer id, String titulo) {
         this.id = id;
         this.titulo = titulo;
-        this.recursos = recursos;
     }
 
     public Integer getId() {
@@ -45,13 +46,5 @@ public class Colecao {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
-    }
-
-    public List<Recurso> getRecursos() {
-        return recursos;
-    }
-
-    public void setRecursos(List<Recurso> recursos) {
-        this.recursos = recursos;
     }
 }

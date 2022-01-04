@@ -16,8 +16,8 @@ public class Curso extends Colecao {
     @JsonProperty("data_de_registro")
     private Date dataDeRegistro;
 
-    public Curso(Integer id, String titulo, List<Recurso> recursos) {
-        super(id, titulo, recursos);
+    public Curso(Integer id, String titulo) {
+        super(id, titulo);
     }
 
     public Integer getId() {
