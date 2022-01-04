@@ -29,6 +29,25 @@ public class AutorController {
         return new ResponseEntity<>(autores, HttpStatus.OK);
     }
 
+    @PostMapping("/{autorId}/adiciona/recurso/{recursoId}")
+    public ResponseEntity<String> relateAutorWithRecurso(
+            @PathVariable (value = "recursoId") int recursoId,
+            @PathVariable (value = "autorId") int autorId) {
+
+        Optional<Recurso> recurso = recursoRepository.findById(recursoId);
+        Optional<Autor> autor = autorRepository.findById(autorId);
+
+        if (recurso.isEmpty() || autor.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        var updatedAutor = autor.get();
+        updatedAutor.appendRecurso(recurso.get());
+
+        autorRepository.save(updatedAutor);
+        return new ResponseEntity<String>("Success", HttpStatus.CREATED);
+    }
+
     @PostMapping("/recurso/{recursoId}")
     public ResponseEntity<Autor> createAutor(@PathVariable (value = "recursoId") int recursoId,
                                                  @RequestBody Autor autor) {

@@ -27,7 +27,20 @@ public class RecursosController {
 
 
     @GetMapping
-    public ResponseEntity<List<Recurso>> getAllTodos() {
+    public ResponseEntity<List<Recurso>> getAllTodos(
+            @RequestParam (value = "autor_id", required=false) Integer autorId,
+            @RequestParam (value = "colecao_id", required=false) Integer colecaoId) {
+
+        if(colecaoId != null) {
+            List<Recurso> recursos = recursoRepository.findRecursosByColecaoId(colecaoId);
+            return new ResponseEntity<>(recursos, HttpStatus.OK);
+        }
+
+        if(autorId != null) {
+            List<Recurso> recursos = recursoRepository.findRecursosByAutorId(autorId);
+            return new ResponseEntity<>(recursos, HttpStatus.OK);
+        }
+
         List<Recurso> recursos = recursoRepository.findAll();
         return new ResponseEntity<>(recursos, HttpStatus.OK);
     }
