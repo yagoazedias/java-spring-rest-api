@@ -47,4 +47,16 @@ public class Colecao {
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
+
+    public Set<Recurso> getRecursos() {
+        return recursos;
+    }
+
+    public void setRecursos(Set<Recurso> recursos) {
+        this.recursos = recursos;
+    }
+
+    public void appendRecursos(Recurso recurso) {
+        this.recursos.add(recurso);
+    }
 }

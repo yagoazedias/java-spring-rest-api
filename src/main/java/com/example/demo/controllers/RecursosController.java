@@ -1,8 +1,10 @@
 package com.example.demo.controllers;
 
 import com.example.demo.helpers.ValidationError;
+import com.example.demo.model.Colecao;
 import com.example.demo.model.Curso;
 import com.example.demo.model.Recurso;
+import com.example.demo.repository.IColecaoRepository;
 import com.example.demo.repository.IRecursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,10 +22,20 @@ public class RecursosController {
     @Autowired
     private IRecursoRepository recursoRepository;
 
-    @GetMapping
-    public ResponseEntity<List<Recurso>> getAllTodos() {
-        List<Recurso> recursos = recursoRepository.findAll();
-        return new ResponseEntity<>(recursos, HttpStatus.OK);
+    @Autowired
+    private IColecaoRepository colecaoRepository;
+
+
+    @PostMapping("/colecao/{colecaoId}")
+    public ResponseEntity<Recurso> createRecurso(@PathVariable (value = "colecaoId") int colecaoId,
+                                 @RequestBody Recurso recurso) {
+        Optional<Colecao> colecao = colecaoRepository.findById(colecaoId);
+        if (colecao.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        recurso.setColecao(colecao.get());
+        recursoRepository.save(recurso);
+        return new ResponseEntity<>(recurso, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -43,24 +55,6 @@ public class RecursosController {
             return new ResponseEntity<>(recurso.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Recurso> updateRecursoById(@PathVariable int id, @RequestBody Recurso incomingRecurso) {
-        Optional<Recurso> recurso = recursoRepository.findById(id);
-        if (!recurso.isEmpty()) {
-            if (!Objects.equals(incomingRecurso.getId(), recurso.get().getId()))
-                return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-
-            recursoRepository.save(incomingRecurso);
-            return new ResponseEntity<>(incomingRecurso, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping
-    public Recurso create(@RequestBody Recurso recurso) {
-        return recursoRepository.save(recurso);
     }
 }
 

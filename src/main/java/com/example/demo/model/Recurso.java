@@ -22,8 +22,8 @@ public class Recurso {
     private String link;
     @JsonProperty
     private String imagem;
-    @JsonProperty("dataDeCricao")
-    private Date dataDeCricao;
+    @JsonProperty("data_de_criacao")
+    private Date dataDeCriacao;
     @JsonProperty("data_de_registro")
     private Date dataDeRegistro;
     @JsonProperty("palavras_chaves")
@@ -38,16 +38,24 @@ public class Recurso {
 
     public Recurso() {}
 
-    public Recurso(Integer id, String titulo, String descricao, String link, String imagem, Date dataDeCricao, Date dataDeRegistro, ArrayList<String> palavrasChaves, List<Autor> autores) {
+    public Recurso(Integer id, String titulo, String descricao, String link, String imagem, Date dataDeCriacao, Date dataDeRegistro, ArrayList<String> palavrasChaves, List<Autor> autores) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.link = link;
         this.imagem = imagem;
-        this.dataDeCricao = dataDeCricao;
+        this.dataDeCriacao = dataDeCriacao;
         this.dataDeRegistro = dataDeRegistro;
         this.palavrasChaves = palavrasChaves;
         this.autores = autores;
+    }
+
+    public Colecao getColecao() {
+        return colecao;
+    }
+
+    public void setColecao(Colecao colecao) {
+        this.colecao = colecao;
     }
 
     public Integer getId() {
@@ -90,12 +98,12 @@ public class Recurso {
         this.imagem = imagem;
     }
 
-    public Date getDataDeCricao() {
-        return dataDeCricao;
+    public Date getDataDeCriacao() {
+        return dataDeCriacao;
     }
 
-    public void setDataDeCricao(Date dataDeCricao) {
-        this.dataDeCricao = dataDeCricao;
+    public void setDataDeCriacao(Date dataDeCriacao) {
+        this.dataDeCriacao = dataDeCriacao;
     }
 
     public Date getDataDeRegistro() {
