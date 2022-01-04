@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,7 +21,19 @@ public class EventoController {
     private IEventoRepository eventoRepository;
 
     @GetMapping
-    public ResponseEntity<List<Evento>> getAllTodos() {
+    public ResponseEntity<List<Evento>> getAllTodos(
+            @RequestParam (value = "start_date", required = false) String start,
+            @RequestParam (value = "end_date", required = false) String end
+    ) {
+
+        if(start != null && end != null) {
+            LocalDate startDate = LocalDate.parse(start);
+            LocalDate endDate = LocalDate.parse(end);
+
+            List<Evento> eventos = eventoRepository.findAllBetweenDates(startDate, endDate);
+            return new ResponseEntity<>(eventos, HttpStatus.OK);
+        }
+
         List<Evento> eventos = eventoRepository.findAll();
         return new ResponseEntity<>(eventos, HttpStatus.OK);
     }
