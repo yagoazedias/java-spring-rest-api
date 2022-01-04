@@ -24,7 +24,14 @@ public class AutorController {
     private IRecursoRepository recursoRepository;
 
     @GetMapping
-    public ResponseEntity<List<Autor>> getAllTodos() {
+    public ResponseEntity<List<Autor>> getAllTodos(
+            @RequestParam (value = "sobrenome", required = false) String sobrenome) {
+
+        if (sobrenome != null) {
+            List<Autor> autores = autorRepository.findAllBySobrenome(sobrenome);
+            return new ResponseEntity<>(autores, HttpStatus.OK);
+        }
+
         List<Autor> autores = autorRepository.findAll();
         return new ResponseEntity<>(autores, HttpStatus.OK);
     }
