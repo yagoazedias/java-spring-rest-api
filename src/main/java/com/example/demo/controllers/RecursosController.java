@@ -26,6 +26,12 @@ public class RecursosController {
     private IColecaoRepository colecaoRepository;
 
 
+    @GetMapping
+    public ResponseEntity<List<Recurso>> getAllTodos() {
+        List<Recurso> recursos = recursoRepository.findAll();
+        return new ResponseEntity<>(recursos, HttpStatus.OK);
+    }
+
     @PostMapping("/colecao/{colecaoId}")
     public ResponseEntity<Recurso> createRecurso(@PathVariable (value = "colecaoId") int colecaoId,
                                  @RequestBody Recurso recurso) {
@@ -36,6 +42,19 @@ public class RecursosController {
         recurso.setColecao(colecao.get());
         recursoRepository.save(recurso);
         return new ResponseEntity<>(recurso, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Recurso> updateRecursoById(@PathVariable int id, @RequestBody Recurso incomingRecurso) {
+        Optional<Recurso> recurso = recursoRepository.findById(id);
+        if (!recurso.isEmpty()) {
+            if (!Objects.equals(incomingRecurso.getId(), recurso.get().getId()))
+                return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+
+            recursoRepository.save(incomingRecurso);
+            return new ResponseEntity<>(incomingRecurso, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{id}")

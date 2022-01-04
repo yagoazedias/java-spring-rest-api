@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class Recurso {
     @JsonProperty("palavras_chaves")
     public ArrayList<String> palavrasChaves;
 
+    @JsonIgnore
     @OneToMany(mappedBy="recurso")
     private List<Autor> autores;
 

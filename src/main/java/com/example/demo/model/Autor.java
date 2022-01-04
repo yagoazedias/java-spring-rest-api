@@ -32,7 +32,7 @@ public class Autor {
     @JsonProperty
     private String orcid;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JsonIgnore
     @JoinColumn(name="recurso_id")
     private Recurso recurso;
