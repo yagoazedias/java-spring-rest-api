@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "autores")
@@ -32,21 +34,24 @@ public class Autor {
     @JsonProperty
     private String orcid;
 
-    @ManyToOne(fetch=FetchType.EAGER)
     @JsonIgnore
-    @JoinColumn(name="recurso_id")
-    private Recurso recurso;
+    @ManyToMany
+    @JoinTable(
+            name="autores_recursos",
+            joinColumns=@JoinColumn(name="autor_id"),
+            inverseJoinColumns=@JoinColumn(name="recurso_id"))
+    private Set<Recurso> recursos = new HashSet<>();
 
     public Autor() {}
 
-    public Autor(Integer id, String email, String nome, String sobrenome, String afiliacao, String orcid, Recurso recurso) {
+    public Autor(Integer id, String email, String nome, String sobrenome, String afiliacao, String orcid, Set<Recurso> recurso) {
         this.id = id;
         this.email = email;
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.afiliacao = afiliacao;
         this.orcid = orcid;
-        this.recurso = recurso;
+        this.recursos = recurso;
     }
 
     public Integer getId() {
@@ -97,11 +102,15 @@ public class Autor {
         this.orcid = orcid;
     }
 
-    public Recurso getRecurso() {
-        return recurso;
+    public Set<Recurso> getRecurso() {
+        return recursos;
     }
 
-    public void setRecurso(Recurso recurso) {
-        this.recurso = recurso;
+    public void setRecurso(Set<Recurso> recursos) {
+        this.recursos = recursos;
+    }
+
+    public void appendRecurso(Recurso recurso) {
+        this.recursos.add(recurso);
     }
 }

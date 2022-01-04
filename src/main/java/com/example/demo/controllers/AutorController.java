@@ -36,7 +36,7 @@ public class AutorController {
         if (recurso.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        autor.setRecurso(recurso.get());
+        autor.appendRecurso(recurso.get());
         autorRepository.save(autor);
         return new ResponseEntity<Autor>(autor, HttpStatus.OK);
     }

@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="recursos")
@@ -30,9 +31,9 @@ public class Recurso {
     @JsonProperty("palavras_chaves")
     public ArrayList<String> palavrasChaves;
 
+    @ManyToMany(mappedBy = "recursos")
     @JsonIgnore
-    @OneToMany(mappedBy="recurso")
-    private List<Autor> autores;
+    private Set<Autor> autores = new HashSet<>();
 
     @JsonProperty("colecao_id")
     @ManyToOne(fetch = FetchType.EAGER)
@@ -41,7 +42,7 @@ public class Recurso {
 
     public Recurso() {}
 
-    public Recurso(Integer id, String titulo, String descricao, String link, String imagem, Date dataDeCriacao, Date dataDeRegistro, ArrayList<String> palavrasChaves, List<Autor> autores) {
+    public Recurso(Integer id, String titulo, String descricao, String link, String imagem, Date dataDeCriacao, Date dataDeRegistro, ArrayList<String> palavrasChaves, Set<Autor> autores) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -125,11 +126,11 @@ public class Recurso {
         this.palavrasChaves = palavrasChaves;
     }
 
-    public List<Autor> getAutores() {
+    public Set<Autor> getAutores() {
         return autores;
     }
 
-    public void setAutores(List<Autor> autores) {
+    public void setAutores(Set<Autor> autores) {
         this.autores = autores;
     }
 }
