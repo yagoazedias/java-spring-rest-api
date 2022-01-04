@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "cursos")
@@ -14,6 +15,10 @@ public class Curso extends Colecao {
     private Integer id;
     @JsonProperty("data_de_registro")
     private Date dataDeRegistro;
+
+    public Curso(Integer id, String titulo, List<Recurso> recursos) {
+        super(id, titulo, recursos);
+    }
 
     public Integer getId() {
         return id;
