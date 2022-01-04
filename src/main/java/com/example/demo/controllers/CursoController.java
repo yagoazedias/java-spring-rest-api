@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -46,16 +47,19 @@ public class CursoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Curso> updateCursoById(@PathVariable int id, @RequestBody Curso incoming_curso) {
+    public ResponseEntity<Curso> updateCursoById(@PathVariable int id, @RequestBody Curso incomingCurso) {
         Optional<Curso> curso = cursoRepository.findById(id);
         if (!curso.isEmpty()) {
-            ValidationError validationError = getValidationErrorByCurso(incoming_curso, true);
+            ValidationError validationError = getValidationErrorByCurso(incomingCurso, true);
 
             if (validationError.hasError())
                 return new ResponseEntity<>(null, validationError.getStatus());
 
-            cursoRepository.save(incoming_curso);
-            return new ResponseEntity<>(incoming_curso, HttpStatus.OK);
+            if (!Objects.equals(incomingCurso.getId(), curso.get().getId()))
+                return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+
+            cursoRepository.save(incomingCurso);
+            return new ResponseEntity<>(incomingCurso, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
