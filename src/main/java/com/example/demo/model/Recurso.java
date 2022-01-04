@@ -33,7 +33,7 @@ public class Recurso {
     private List<Autor> autores;
 
     @JsonProperty("colecao_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="colecao_id")
     private Colecao colecao;
 

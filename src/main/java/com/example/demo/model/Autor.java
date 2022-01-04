@@ -30,12 +30,14 @@ public class Autor {
     private String afiliacao;
 
     @JsonProperty
-    private String Orcid;
+    private String orcid;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name="recurso_id")
     private Recurso recurso;
+
+    public Autor() {}
 
     public Autor(Integer id, String email, String nome, String sobrenome, String afiliacao, String orcid, Recurso recurso) {
         this.id = id;
@@ -43,7 +45,7 @@ public class Autor {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.afiliacao = afiliacao;
-        Orcid = orcid;
+        this.orcid = orcid;
         this.recurso = recurso;
     }
 
@@ -88,11 +90,11 @@ public class Autor {
     }
 
     public String getOrcid() {
-        return Orcid;
+        return orcid;
     }
 
     public void setOrcid(String orcid) {
-        Orcid = orcid;
+        this.orcid = orcid;
     }
 
     public Recurso getRecurso() {
