@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -38,5 +39,37 @@ public class AutorController {
         autor.setRecurso(recurso.get());
         autorRepository.save(autor);
         return new ResponseEntity<Autor>(autor, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Autor> updateAutorById(@PathVariable int id, @RequestBody Autor incomingAutor) {
+        Optional<Autor> autor = autorRepository.findById(id);
+        if (!autor.isEmpty()) {
+            if (!Objects.equals(incomingAutor.getId(), autor.get().getId()))
+                return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+
+            autorRepository.save(incomingAutor);
+            return new ResponseEntity<>(incomingAutor, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Autor> getAutorById(@PathVariable int id) {
+        Optional<Autor> autor = autorRepository.findById(id);
+        if (!autor.isEmpty()) {
+            return new ResponseEntity<>(autor.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Autor> deleteAutorById(@PathVariable int id) {
+        Optional<Autor> autor = autorRepository.findById(id);
+        if (!autor.isEmpty()) {
+            autorRepository.deleteById(id);
+            return new ResponseEntity<>(autor.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }
