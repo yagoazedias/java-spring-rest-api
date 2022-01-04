@@ -28,9 +28,10 @@ public class Recurso {
     private Date dataDeRegistro;
     @JsonProperty("palavras_chaves")
     public ArrayList<String> palavrasChaves;
-    @OneToMany
-    @JoinColumn(name="autor_id")
+
+    @OneToMany(mappedBy="recurso")
     private List<Autor> autores;
+
     @JsonProperty("colecao_id")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="colecao_id")

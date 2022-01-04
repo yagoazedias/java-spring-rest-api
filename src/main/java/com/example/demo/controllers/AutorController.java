@@ -1,16 +1,16 @@
 package com.example.demo.controllers;
 
 import com.example.demo.model.Autor;
+import com.example.demo.model.Recurso;
 import com.example.demo.repository.IAutorRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.demo.repository.IRecursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/autor")
@@ -19,7 +19,8 @@ public class AutorController {
     @Autowired
     private IAutorRepository autorRepository;
 
-    Logger logger = LoggerFactory.getLogger(AutorController.class);
+    @Autowired
+    private IRecursoRepository recursoRepository;
 
     @GetMapping
     public ResponseEntity<List<Autor>> getAllTodos() {
@@ -27,13 +28,15 @@ public class AutorController {
         return new ResponseEntity<>(autores, HttpStatus.OK);
     }
 
-    @PostMapping
-    public Autor create(@RequestBody Autor autor) {
-        try {
-            return autorRepository.save(autor);
-        } catch (Exception e) {
-            logger.error(String.valueOf(e));
-            return null;
+    @PostMapping("/recurso/{recursoId}")
+    public ResponseEntity<Autor> createAutor(@PathVariable (value = "recursoId") int recursoId,
+                                                 @RequestBody Autor autor) {
+        Optional<Recurso> recurso = recursoRepository.findById(recursoId);
+        if (recurso.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+        autor.setRecurso(recurso.get());
+        autorRepository.save(autor);
+        return new ResponseEntity<Autor>(autor, HttpStatus.OK);
     }
 }
